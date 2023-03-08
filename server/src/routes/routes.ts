@@ -1,7 +1,11 @@
 import * as express from "express";
 import { Express } from "express";
-import { getAllPosts } from "../services/posts_service";
-import { addUser, getAllUsers } from "../services/users_service";
+import { addPost, getAllPosts } from "../services/posts_service";
+import {
+	addUser,
+	getAllUsers,
+	getUserById,
+} from "../services/users_service";
 
 /*
 
@@ -96,6 +100,33 @@ function addAPIRoutes(app: Express) {
 		});
 
 		res.status(200).send({ success: true });
+	});
+
+	console.log("✍️  Adding add posts routes...");
+	apiRouter.post("/post/add", (req, res) => {
+		const { body } = req;
+
+		console.log(`👋 Adding new post "${body.title}"`);
+
+		const author = getUserById(body.authorID);
+
+		if (author) {
+			const post = {
+				id: `${getAllPosts().length + 1}`,
+				title: body.title,
+				text: body.text,
+				author,
+			};
+			addPost(post);
+		} else {
+			// success = false;
+			res.status(404).send({ success: false });
+		}
+
+		// // reply with a success boolean
+		// res.status(200).send({ success });
+
+		// res.status(200).send({ success: true });
 	});
 
 	apiRouter.get("/users/:id", (req, res) => {

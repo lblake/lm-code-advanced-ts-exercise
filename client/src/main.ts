@@ -48,8 +48,14 @@ async function main() {
 				clear("yes");
 				await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
 				const user = await addUser();
-				state.set(states.MENU);
+				state.set(user);
 				break;
+			case "ADD_POSTS":
+				clear("yes");
+				await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
+				const addPost = await addBlog();
+				state.set(addPost);
+				break;	
 			case "UNKNOWN":
 				clear("yes");
 				print("😵 We have entered an unknown state.");
